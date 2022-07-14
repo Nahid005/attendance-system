@@ -1,8 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const connectDb = require('./db/db')
 const User = require('./model/User');
-const { listeners } = require('./model/User');
+const { token } = require('morgan');
 
 const app = express();
 
@@ -43,7 +44,6 @@ app.post('/login', async (req, res, next) => {
     try{
 
         const user = await User.findOne({email})
-       
         if(!user) {
             return res.status(400).json({message: 'envalide email'})
         }
@@ -53,13 +53,37 @@ app.post('/login', async (req, res, next) => {
             return res.status(400).json({message: 'envalide password'})
         }
 
-        delete user.password
-        res.status(200).json({message: 'login successfully '})
+        delete user._doc.password
+        const tokenGenarate = jwt.sign(user._doc, 'secret-key')
+        res.status(200).json({message: 'login successfully ', tokenGenarate})
 
     }catch(e){
         next(e)
     }
 
+})
+
+app.get('/private', async (req, res, next)=> {
+
+    let token = req.headers.authorization
+    
+    if(!token) {
+        res.status(401).json({message: 'invalid token'})
+    }
+
+    try{
+        token = token.split(' ')[1]
+        const tokenVerify = jwt.verify(token, 'secret-key')
+        const user = await User.findById(tokenVerify._id)
+
+        if(!user){
+            res.status(401).json({message: 'invalid token'})
+        }
+
+        res.json({message: 'this is a private route'})
+    }catch(e) {
+        next(e)
+    }
 })
 
 app.use((err, _req, res, _next) => {
