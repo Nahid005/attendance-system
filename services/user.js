@@ -2,17 +2,22 @@ const User = require("../model/User")
 
 const userFindByProperty = (key, value) => {
     if(key === '_id') {
-        return findById(value)
+        return User.findById(value)
     }
     return User.findOne({[key]: value})
 }
 
-const createNewUser = async ({name, email, password}) => {
-    user = new User({name, email, password})
+const createNewUser = async ({name, email, password,}) => {
+    user = new User({name, email, password, })
     return await user.save()
+}
+
+const findAllUser = () => {
+    return User.find()
 }
 
 module.exports = {
     userFindByProperty,
-    createNewUser
+    createNewUser,
+    findAllUser,
 }
