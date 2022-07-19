@@ -2,7 +2,7 @@ const User = require("../model/User")
 
 const userFindByProperty = (key, value) => {
     if(key === '_id') {
-        return findById(value)
+        return User.findById(value)
     }
     return User.findOne({[key]: value})
 }

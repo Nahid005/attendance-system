@@ -1,9 +1,9 @@
 const User = require('../model/User')
-const {findAllUser, userFindByProperty} = require('../services/user')
+const userService = require('../services/user')
 
 const getUserController = async (_req, res, next) => {
     try{
-        const user = await findAllUser()
+        const user = await userService.findAllUser()
         if(!user) {
             return res.status(400).json({message: 'user not found'})
         }
@@ -30,11 +30,11 @@ const patchUserController = () => {}
 const deleteUserController = () => {}
 
 const getUserByIdController = async (req, res, next) => {
+
     const userId = req.params.userId
-        console.log(userId)
+
     try{
-        
-        const user = await userFindByProperty('_id', userId)
+        const user = await userService.userFindByProperty('_id', userId )
 
         if(!user) {
             res.status(400).json({message: 'user not found'})
