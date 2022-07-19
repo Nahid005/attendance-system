@@ -1,14 +1,13 @@
 const express = require('express');
 const connectDb = require('./db/db')
 const authentication = require('./middleware/authentication')
-const {route} = require('./route/auth')
-const {router} = require('./route/users')
+const routes = require('./route')
 
 const app = express();
 
 app.use(express.json())
-app.use(route)
-app.use(router)
+app.use(routes)
+
 app.get('/private', authentication, (_req, res,)=> {
     return res.json({message: 'this is a private route'})
 })
