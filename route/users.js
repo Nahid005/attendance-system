@@ -2,10 +2,10 @@ const router = require('express').Router()
 
 const userService = require('../controller/users')
 router.get('/:userId', userService.getUserByIdController)                      
-router.post('/users:userId', () => {})
-router.put('/users:userId', () => {})
-router.patch('/users:userId', () => {})
-router.delete('/users:userId', () => {})
+router.put('/:userId', userService.putUserController)
+router.patch('/:userId', userService.patchUserController)
+router.delete('/:userId', userService.deleteUserController)
 router.get('/', userService.getUserController)
+router.post('/', userService.postUserController)
 
 module.exports = router

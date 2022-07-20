@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {userFindByProperty, createNewUser} = require('./user')
 
-const registrationService = async ({name, email, password})=> {
+const registrationService = async ({name, email, password, roles, accountsStatus})=> {
 
     let user = await userFindByProperty('email', email)
     if(user){
@@ -13,7 +13,7 @@ const registrationService = async ({name, email, password})=> {
 
     const salt = await bcrypt.genSalt(10)
     const hash = await bcrypt.hash(password, salt)
-    return createNewUser({name, email, password:hash})
+    return createNewUser({name, email, password:hash, roles, accountsStatus})
 
 }
 
